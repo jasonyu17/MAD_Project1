@@ -17,23 +17,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-<<<<<<< HEAD
-      title: 'Meal Plan Home Page',
-      theme: ThemeData(),
-      home: const MealPlanScreen(),
-=======
       title: 'Meal Planning App',
       theme: ThemeData(
       ),
       home: HomeNavigation(),
->>>>>>> 0a1861252fb74ec551d631e3eb250ee4573fa8f0
       debugShowCheckedModeBanner: false,
     );
   }
 }
-<<<<<<< HEAD
-=======
 class HomeNavigation extends StatefulWidget {
+  const HomeNavigation({super.key});
+
   @override
   _HomeNavigationState createState() => _HomeNavigationState();
 }
@@ -78,4 +72,3 @@ class _HomeNavigationState extends State<HomeNavigation> {
     );
   }
 }
->>>>>>> 0a1861252fb74ec551d631e3eb250ee4573fa8f0
