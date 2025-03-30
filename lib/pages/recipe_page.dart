@@ -9,16 +9,19 @@ class RecipePage extends StatefulWidget {
 
 class _RecipePageState extends State<RecipePage> {
   List<Map<String, dynamic>> _recipes = [];
+  List<Map<String, dynamic>> _filteredRecipes = [];
 
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _ingredientsController = TextEditingController();
   final _instructionsController = TextEditingController();
+  final _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _loadRecipes();
+    _searchController.addListener(_filterRecipes);
   }
 
   Future<void> _loadRecipes() async {
@@ -28,10 +31,23 @@ class _RecipePageState extends State<RecipePage> {
     });
   }
 
+  void _filterRecipes() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredRecipes =
+          _recipes.where((recipe) {
+            final name = recipe['name'].toLowerCase();
+            final description = recipe['description']?.toLowerCase() ?? '';
+            return name.contains(query) || description.contains(query);
+          }).toList();
+    });
+  }
+
   Future<void> _showAddRecipeDialog() async {
     showDialog(
       context: context,
-      builder:(_) => AlertDialog(
+      builder:
+          (_) => AlertDialog(
             title: Text("Add New Recipe"),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -47,7 +63,6 @@ class _RecipePageState extends State<RecipePage> {
                 TextField(
                   controller: _ingredientsController,
                   decoration: InputDecoration(labelText: 'Ingredients'),
-                   
                 ),
                 TextField(
                   controller: _instructionsController,
@@ -96,26 +111,49 @@ class _RecipePageState extends State<RecipePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Recipes')),
-      body:
-          _recipes.isEmpty ? Center(child: Text('No recipes yet.')): ListView.builder(
-            itemCount: _recipes.length,
-            itemBuilder: (context, index) {
-              final recipe = _recipes[index];
-                return ListTile(
-                  title: Text(recipe['name']),
-                  subtitle: Text(recipe['description']),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                          (context) => RecipeDetailPage(recipe: recipe),
-                      ),
-                    );
-                  },
-                );
-              },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: "Search recipes...",
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
             ),
+          ),
+          Expanded(
+            child:
+                _filteredRecipes.isEmpty
+                    ? Center(child: Text('No recipes yet.'))
+                    : ListView.builder(
+                      itemCount: _filteredRecipes.length,
+                      itemBuilder: (context, index) {
+                        final recipe = _filteredRecipes[index];
+                        return ListTile(
+                          title: Text(recipe['name']),
+                          subtitle: Text(recipe['description']),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        RecipeDetailPage(recipe: recipe),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+          ),
+        ],
+      ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddRecipeDialog,
         child: Icon(Icons.add),
