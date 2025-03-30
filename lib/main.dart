@@ -37,7 +37,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
 
   final List<Widget> _pages = [
     HomePage(),
-    FavoritesPage(),
+    FavoritesPage(bookmarkedMeals: ['Brussels Sprouts', 'Caesar Salad']),
     RecipePage(),
   ];
 
