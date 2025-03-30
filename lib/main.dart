@@ -35,8 +35,8 @@ class _HomeNavigationState extends State<HomeNavigation> {
 
   final List<Widget> _pages = [
     HomePage(),
-    RecipePage(),
     FavoritesPage(),
+    RecipePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -48,7 +48,7 @@ class _HomeNavigationState extends State<HomeNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Show the selected page
+      body: _pages[_selectedIndex], 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
