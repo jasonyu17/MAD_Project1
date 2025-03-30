@@ -14,12 +14,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Meal Planning App',
-      theme: ThemeData(
-      ),
-      home: const MealPlanningScreen(),
+      title: 'Meal Plan Home Page',
+      theme: ThemeData(),
+      home: const MealPlanScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
-
