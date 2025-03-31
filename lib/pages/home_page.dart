@@ -13,12 +13,19 @@ class _HomePageState extends State<HomePage> {
   final List<String> mealList = [
     'Brussels Sprouts',
     'Caesar Salad',
-    'Multigrain Crackers (Gluten Free)',
+    'Multigrain Crackers',
     'Frittata',
     'Steak',
   ];
 
-  // Change weeklyMeals to store a list of meals for each day
+  final Map<String, String> mealImages = {
+    'Brussels Sprouts': 'assets/brussels.png',
+    'Caesar Salad': 'assets/caesar.png',
+    'Multigrain Crackers': 'assets/crackers.png',
+    'Frittata': 'assets/frittata.png',
+    'Steak': 'assets/steak.png',
+  };
+
   final Map<String, List<String>> weeklyMeals = {
     'Monday': [],
     'Tuesday': [],
@@ -29,7 +36,6 @@ class _HomePageState extends State<HomePage> {
     'Sunday': [],
   };
 
-  // A set to hold bookmarked meals
   Set<String> bookmarkedMeals = Set<String>();
 
   @override
@@ -38,7 +44,6 @@ class _HomePageState extends State<HomePage> {
     _loadBookmarkedMeals();
   }
 
-  // Load bookmarked meals from SharedPreferences
   Future<void> _loadBookmarkedMeals() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -46,7 +51,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // Save bookmarked meals to SharedPreferences
   Future<void> _saveBookmarkedMeals() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setStringList('bookmarkedMeals', bookmarkedMeals.toList());
@@ -60,10 +64,9 @@ class _HomePageState extends State<HomePage> {
         bookmarkedMeals.add(meal);
       }
     });
-    _saveBookmarkedMeals(); // Save after toggling
+    _saveBookmarkedMeals();
   }
 
-  // Navigate to the FavoritesPage and pass the bookmarkedMeals
   void _goToFavoritesPage() {
     Navigator.push(
       context,
@@ -82,17 +85,16 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.bookmark),
-            onPressed: _goToFavoritesPage, // Navigate to the FavoritesPage
+            onPressed: _goToFavoritesPage,
           ),
         ],
       ),
       body: Column(
         children: [
-          // List of meals with drag functionality
           Expanded(
             child: Column(
               children: mealList.map((meal) {
-                return Draggable<String>( 
+                return Draggable<String>(
                   data: meal,
                   feedback: Material(
                     color: Colors.transparent,
@@ -105,6 +107,10 @@ class _HomePageState extends State<HomePage> {
                   childWhenDragging: Container(),
                   child: Card(
                     child: ListTile(
+                      leading: CircleAvatar(
+                        radius: 25,
+                        backgroundImage: AssetImage(mealImages[meal] ?? 'assets/images/default.png'),
+                      ),
                       title: Text(meal),
                       trailing: GestureDetector(
                         onTap: () => _toggleBookmark(meal),
@@ -120,8 +126,6 @@ class _HomePageState extends State<HomePage> {
               }).toList(),
             ),
           ),
-
-          // SizedBox to contain the days and the drag targets for the meals
           SizedBox(
             height: 250,
             child: Column(
@@ -133,7 +137,6 @@ class _HomePageState extends State<HomePage> {
                       child: DragTarget<String>(
                         onAccept: (meal) {
                           setState(() {
-                            // Add the meal to the list for the respective day
                             weeklyMeals[day]?.add(meal);
                           });
                         },
@@ -145,7 +148,6 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 children: [
                                   Text(day),
-                                  // Display all meals for the day
                                   ...weeklyMeals[day]!.map((meal) {
                                     return Text(
                                       meal,
@@ -168,7 +170,6 @@ class _HomePageState extends State<HomePage> {
                       child: DragTarget<String>(
                         onAccept: (meal) {
                           setState(() {
-                            // Add the meal to the list for the respective day
                             weeklyMeals[day]?.add(meal);
                           });
                         },
@@ -180,7 +181,6 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 children: [
                                   Text(day),
-                                  // Display all meals for the day
                                   ...weeklyMeals[day]!.map((meal) {
                                     return Text(
                                       meal,
