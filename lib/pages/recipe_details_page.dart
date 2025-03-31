@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class RecipeDetailPage extends StatelessWidget {
   final Map<String, dynamic> recipe;
 
-  const RecipeDetailPage({Key? key, required this.recipe}) : super(key: key);
+  const RecipeDetailPage({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,6 @@
 //This gets rid of alittle of the clutter in home page
 
 import 'package:flutter/material.dart';
-import 'package:project1/pages/favorites_page.dart';
 import 'package:project1/pages/home_page.dart';
 import 'package:project1/pages/recipe_page.dart';
 
@@ -37,7 +36,6 @@ class _HomeNavigationState extends State<HomeNavigation> {
 
   final List<Widget> _pages = [
     HomePage(),
-    FavoritesPage(bookmarkedMeals: ['Brussels Sprouts', 'Caesar Salad']),
     RecipePage(),
   ];
 
@@ -58,10 +56,6 @@ class _HomeNavigationState extends State<HomeNavigation> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
