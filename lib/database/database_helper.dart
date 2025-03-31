@@ -37,7 +37,8 @@ class DatabaseHelper {
       description TEXT,
       ingredients TEXT,
       instructions TEXT,
-      is_favorite INTEGER DEFAULT 0
+      is_favorite INTEGER DEFAULT 0,
+      image_path TEXT
     )
   ''');
 }

@@ -3,6 +3,8 @@ import 'package:project1/pages/favorites_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project1/database/database_helper.dart';
 
+import 'dart:io';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -36,6 +38,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    //DatabaseHelper().deleteDatabaseFile();
     _loadRecipesFromDb();
   }
 
@@ -75,7 +78,7 @@ class _HomePageState extends State<HomePage> {
 
   void _toggleFavorite(int id, bool currentStatus) async {
     await DatabaseHelper().toggleFavorite(id, currentStatus);
-    _loadRecipesFromDb(); 
+    _loadRecipesFromDb();
   }
 
   @override
@@ -98,8 +101,7 @@ class _HomePageState extends State<HomePage> {
               children:
                   _recipes.map((recipe) {
                     String name = recipe['name'];
-                    String image =
-                        'assets/images/default.png'; 
+                    String image = 'assets/images/default.png';
                     bool isFavorite = recipe['is_favorite'] == 1;
 
                     return Draggable<String>(
@@ -117,8 +119,14 @@ class _HomePageState extends State<HomePage> {
                         child: ListTile(
                           leading: CircleAvatar(
                             radius: 25,
-                            backgroundImage: AssetImage(image),
+                            backgroundImage:
+                                (recipe['image_path'] != null &&
+                                        File(recipe['image_path']).existsSync())
+                                    ? FileImage(File(recipe['image_path']))
+                                    : AssetImage('assets/images/default.png')
+                                        as ImageProvider,
                           ),
+
                           title: Text(name),
                           trailing: GestureDetector(
                             onTap:
